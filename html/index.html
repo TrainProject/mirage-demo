@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passwordless Sign-In</title>
+  </head>
+  <body></body>
+  <script type="module">
+    let compatible = false;
+
+    const key = "Chrome/";
+    const i = navigator.userAgent.indexOf(key);
+
+    if (i !== -1) {
+      const version = parseFloat(navigator.userAgent.substr(i + key.length));
+      if (version >= 80) {
+        compatible = true;
+      }
+    }
+
+    if (compatible) {
+      const scriptNode = document.createElement("script");
+      scriptNode.setAttribute("type", "module");
+      scriptNode.src = "app-root.js";
+      document.head.appendChild(scriptNode);
+      document.body.innerHTML = "<app-root />";
+    } else {
+      document.body.innerHTML = "<p>Chrome/80+ compatible is required</p>";
+    }
+  </script>
+</html>
