@@ -34,10 +34,6 @@ class PopUp extends LitElement {
     }
   `;
 
-  _click() {
-    this.message = null;
-  }
-
   render() {
     if (!this.message) {
       return;
@@ -45,8 +41,8 @@ class PopUp extends LitElement {
 
     return html`
       <div class="${this.level}">
-        <button @click=${this._click}>✖️</button>
         <p>${this.message}</p>
+        <button>✖️</button>
       </div>
     `;
   }
