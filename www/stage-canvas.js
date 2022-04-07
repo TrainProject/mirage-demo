@@ -1,5 +1,28 @@
 import {BaseCanvas} from './base-canvas';
-import StageController from './stage-controller';
+import {StageController} from './stage-controller';
+
+class Circle {
+  stage;
+  index;
+  id;
+
+  constructor(x, y, radius) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+  }
+
+  key() {
+    if (this.id !== undefined) {
+      return this.id;
+    }
+    if (this.index !== undefined) {
+      return this.index;
+    }
+
+    throw new Error('No Key Found for circle');
+  }
+}
 
 export class StageCanvas extends BaseCanvas {
   static properties = {
@@ -80,7 +103,7 @@ export class StageCanvas extends BaseCanvas {
     const vecJFy = Fy - Jy;
 
     const shapes = [];
-    for (const id of this.layers) {
+    for (const item of this.layers) {
       let x = 0;
       let y = 0;
       let radius = 4;
@@ -126,7 +149,15 @@ export class StageCanvas extends BaseCanvas {
       ctx.strokeStyle = color;
       ctx.stroke();
 
-      shapes.push({id, x, y, radius, stage: this.name});
+      const shape = new Circle(x, y, radius);
+      shape.stage = this.name;
+      if (!isNaN(item)) {
+        shape.index = item;
+      } else if (typeof item === 'string') {
+        shape.id = item;
+      }
+
+      shapes.push(shape);
     }
     this.stage.shapes = shapes;
   }

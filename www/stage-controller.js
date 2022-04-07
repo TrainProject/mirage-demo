@@ -13,7 +13,7 @@ class Node {
   }
 }
 
-export default class StageController {
+export class StageController {
   _root;
   _maxDistance = 0;
 
@@ -53,7 +53,7 @@ export default class StageController {
 
     const maxHeap = [];
     this._search(point, this._root, maxSize, maxDistance, maxHeap);
-    return maxHeap.map(item => item[1].attrs);
+    return maxHeap.map((item) => item[1].attrs);
   }
 
   _search(point, node, maxSize, maxDistance, maxHeap) {

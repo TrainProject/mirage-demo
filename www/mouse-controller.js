@@ -1,4 +1,4 @@
-export default class MouseController {
+export class MouseController {
   host;
 
   movedX = 0;
