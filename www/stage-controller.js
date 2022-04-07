@@ -1,5 +1,3 @@
-import MouseController from './mouse-controller';
-
 class Node {
   left = null;
   right = null;
@@ -15,21 +13,18 @@ class Node {
   }
 }
 
-export default class StageController extends MouseController {
+export default class StageController {
   _root;
   _maxDistance = 0;
 
-  selected = [];
+  host;
   dimensions = ['x', 'y'];
   distance(a, b) {
     return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
   }
 
-  onMouseUp(event) {
-    const {offsetX: x, offsetY: y} = event;
-    this.selected = this.nearest({x, y}, 4, this._maxDistance);
-    console.log(this.selected);
-    super.onMouseUp(event);
+  constructor(host) {
+    this.host = host;
   }
 
   set shapes(v) {
@@ -51,14 +46,14 @@ export default class StageController extends MouseController {
     this._root = this._build(v, 0, null);
   }
 
-  nearest(point, maxSize, maxDistance) {
+  nearest(point, maxSize = 4, maxDistance = this._maxDistance) {
     if (!this._root || maxSize < 1 || maxDistance <= 0) {
       return [];
     }
 
     const maxHeap = [];
     this._search(point, this._root, maxSize, maxDistance, maxHeap);
-    return maxHeap;
+    return maxHeap.map(item => item[1].attrs);
   }
 
   _search(point, node, maxSize, maxDistance, maxHeap) {
