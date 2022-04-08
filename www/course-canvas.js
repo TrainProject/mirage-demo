@@ -1,9 +1,27 @@
 import {LitElement, html, css} from 'lit';
-import groups3 from './groups3';
+import groups3 from './groups3.json';
 
 import './stage-canvas';
 import './hit-canvas';
 import './grade-bar';
+
+// const dictionary = {
+//   // xd0001: '小学',
+//   // xd0002: '初中',
+//   // xd0003: '高中',
+//   // njs001: '一年级上',
+//   // njx001: '一年级下',
+//   // njs002: '二年级上',
+//   // njx002: '二年级下',
+//   // njs003: '三年级上',
+//   // njx003: '三年级下',
+//   // njs004: '四年级上',
+//   // njx004: '四年级下',
+//   // njs005: '五年级上',
+//   // njx005: '五年级下',
+//   // njs006: '六年级上',
+//   // njx006: '六年级下',
+// };
 
 export class CourseCanvas extends LitElement {
   static get styles() {
@@ -45,7 +63,11 @@ export class CourseCanvas extends LitElement {
                 ></stage-canvas>`
             )}
             <hit-canvas @select=${this._selectRange} name=${name}></hit-canvas>
-            <grade-bar @toggle=${this._toggleGrade} name=${name}></grade-bar>
+            <grade-bar @toggle=${this._toggleGrade} name=${name}>
+              ${children.map(
+                ({name}) => html`<button name=${name}>${name}</button>`
+              )}
+            </grade-bar>
           </div>
         `
       )}

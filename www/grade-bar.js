@@ -1,23 +1,4 @@
 import {LitElement, html, css} from 'lit';
-import groups3 from './groups3.js';
-
-// const dictionary = {
-//   // xd0001: '小学',
-//   // xd0002: '初中',
-//   // xd0003: '高中',
-//   // njs001: '一年级上',
-//   // njx001: '一年级下',
-//   // njs002: '二年级上',
-//   // njx002: '二年级下',
-//   // njs003: '三年级上',
-//   // njx003: '三年级下',
-//   // njs004: '四年级上',
-//   // njx004: '四年级下',
-//   // njs005: '五年级上',
-//   // njx005: '五年级下',
-//   // njs006: '六年级上',
-//   // njx006: '六年级下',
-// };
 
 export class GradeBar extends LitElement {
   static get styles() {
@@ -40,16 +21,17 @@ export class GradeBar extends LitElement {
         height: 36px;
       }
 
-      button {
+      ::slotted(button) {
         height: 18px;
         font-size: 8px;
-      }
-
-      button.on {
         background-color: white;
       }
 
-      .njx0012 {
+      ::slotted(button.off) {
+        background-color: #e0e0e0;
+      }
+
+      ::slotted(button[name='njx0012']) {
         height: 100%;
       }
     `;
@@ -62,16 +44,18 @@ export class GradeBar extends LitElement {
     };
   }
 
-  constructor() {
-    super();
-    this._states = {};
-  }
-
-  _toggle(grade) {
+  _toggle({target}) {
+    const grade = target.getAttribute('name');
     this._states = {
       ...this._states,
       [grade]: this._states?.[grade] === false,
     };
+
+    if (this._states[grade] === false) {
+      target.classList.add('off');
+    } else {
+      target.classList.remove('off');
+    }
 
     this.dispatchEvent(
       new CustomEvent('toggle', {
@@ -83,27 +67,10 @@ export class GradeBar extends LitElement {
   }
 
   render() {
-    const options = [];
-    for (const item of groups3) {
-      if (item.name == this.name) {
-        item.children.forEach((item) => {
-          options.push(item.name);
-        });
-      }
-    }
-
     return html`
       <span class="${this.name}">${this.name}</span>
       <div class="container">
-        ${options.map(
-          (opt) =>
-            html`<button
-              @click=${() => this._toggle(opt)}
-              class="${opt} ${this._states[opt] === false ? 'off' : 'on'}"
-            >
-              ${opt}
-            </button>`
-        )}
+        <slot @click=${this._toggle}></slot>
       </div>
     `;
   }
